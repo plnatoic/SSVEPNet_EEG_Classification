@@ -34,10 +34,6 @@ Standard CCA is training-free, so its overall accuracy is the same under both
 partitions. Per-subject accuracy is 93.00 ± 11.86%: subjects 1–2 are much
 harder than the rest, which explains the wide leave-one-subject-out spread.
 
-The previous version of this project reported 100% accuracy. That number was
-caused by trial leakage and is not cited here. See [Why the old 100% was
-invalid](#why-the-old-100-was-invalid).
-
 ## Data
 
 - 10 subjects × 180 trials × 8 channels × 1024 samples.
@@ -92,25 +88,6 @@ If Jupyter is not installed, open `SSVEP_CCA.ipynb` in Kaggle or Colab instead.
 ├── results.json       # output from the notebook
 └── README.md
 ```
-
-## Why the old 100% was invalid
-
-The old notebook kept the `Trial` column as a feature and split rows randomly.
-Each trial contributes 8 rows (one per channel), so the same trial could appear
-in both train and test. A nearest-neighbour model can then match rows by trial
-identity instead of learning the EEG signal.
-
-After removing the trial ID and splitting by trial, the old CCA + KNN pipeline
-drops to about 12.9%. For 12 classes, random guessing is 8.3%, so the old 100%
-was not a real result.
-
-## When not to use this
-
-- Do not use it for clinical diagnosis or a consumer BCI product.
-- Do not expect it to work on a new dataset without re-tuning the filters and
-  checking the stimulus frequencies.
-- Do not use it for real-time decoding: short windows and latency were not
-  tested.
 
 ## Limitations
 
