@@ -5,14 +5,14 @@
 
 ## Overview
 
-This project classifies 12 SSVEP stimulus frequencies from 8-channel EEG
+This notebook classifies 12 SSVEP stimulus frequencies from 8-channel EEG
 trials. Each trial is compared against sine/cosine references at every target
 frequency; the resulting CCA correlations are used both as a training-free
 classifier (argmax) and as features for logistic regression and KNN.
 
-The original notebook reported 100% accuracy. That number is invalid: it kept
+The earlier notebook reported 100% accuracy. That number is invalid: it kept
 the trial ID as a feature and split rows randomly, so the same trial could
-appear in both train and test. The corrected pipeline drops trial IDs and
+appear in both train and test. The corrected notebook drops trial IDs and
 evaluates with trial-level and subject-level splits.
 
 ## Data
@@ -53,37 +53,33 @@ The standard CCA classifier is training-free, so its overall accuracy is the
 same under both partitions. Per-subject mean accuracy is 93.00 ± 11.86%, which
 shows the subject-to-subject variation behind the leave-one-subject-out scores.
 
-## Important note about the original notebook
+## Important note about the old 100%
 
-`Miniproject_NeuronScience.ipynb` is kept for reference. It contains the
-original evaluation that produced 100% accuracy. Do not cite that number: the
-`Trial` column was used as a feature, and random row splits allowed the same
-trial (8 channel rows) to appear in both train and test. `main.py` is the
-corrected, leakage-free evaluation.
+The earlier evaluation used the `Trial` column as a feature and split rows
+randomly. Each trial has 8 channel rows, so the same trial could appear in both
+train and test. After removing the trial ID and splitting by trial, the old
+CCA + KNN pipeline drops to about 12.9% (chance for 12 classes is 8.3%). The
+100% number must not be cited.
 
 ## Quick start
 
 ```bash
 pip install -r requirements.txt
 git clone https://github.com/YuDongPan/SSVEPNet.git
-python main.py --data-dir SSVEPNet/data/Dial
+jupyter notebook SSVEP_CCA.ipynb
 ```
 
-The script prints the results and writes `results.json`.
+Run all cells. The notebook prints the results and writes `results.json`.
 
-Run with a different data location:
-
-```bash
-python main.py --data-dir /path/to/Dial --output results.json
-```
+If you do not have Jupyter locally, open `SSVEP_CCA.ipynb` in Kaggle or Colab.
 
 ## Project structure
 
 ```text
 .
-├── main.py                          # corrected pipeline and evaluation
+├── SSVEP_CCA.ipynb    # corrected pipeline and evaluation
 ├── requirements.txt
-├── Miniproject_NeuronScience.ipynb  # original notebook, contains leakage
+├── results.json       # output of the notebook
 └── README.md
 ```
 
